@@ -25,17 +25,48 @@ const myArr = [0 , 1 , 2 , 3 , 4 ,5];
 
 // splice , slice 
 
-console.log("A" , myArr)
+// console.log("A" , myArr)
 
-const myn1 = myArr.slice(1 , 3) 
+// const myn1 = myArr.slice(1 , 3) 
 
-console.log(myn1)
-console.log("B" , myArr)
+// console.log(myn1)
+// console.log("B" , myArr)
 
-const myn2 = myArr.splice(1 , 3) 
-console.log(myn2)
-console.log("C" , myArr)
+// const myn2 = myArr.splice(1 , 3) 
+// console.log(myn2)
+// console.log("C" , myArr)
 
 // slice last index not include and return new array not manipulate original array
 // splice last index is also included and return new array and original aarray is also manipulated 
 // as index in splice that value  not in orginal array 
+
+
+
+const arr1 = [0 , 1 , 2 ]
+const arr2 = [3 , 4, 5]
+// arr1.push(arr2);
+
+// console.log(arr1)  // it will return arr of arr
+// push work on original array 
+
+// const arr3 = arr1.concat(arr2)
+// console.log(arr3)
+// return new array 
+
+
+// spread operator
+
+// const newArr = [...arr1 , ...arr2]
+// console.log(newArr)
+
+// const res_arr = [0 , 1, 2 , [3, 4, 5, 6] , 7 , [8 , 9 ,[10 , 11]]]
+
+// const useable_array = res_arr.flat(Infinity)
+// // The .flat([depth]) method creates a new array with sub-array elements flattened up to the specified depth.
+// console.log(useable_array)
+
+// check and transform to array 
+
+console.log(Array.isArray("Satyam"))
+console.log(Array.from("Satyam"))
+console.log(Array.from({name: "satyam"}))
