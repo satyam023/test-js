@@ -1,0 +1,219 @@
+            how js run file ? 
+       ->    Javascript execution context 
+ {} Global Execution context (GEC) <- this 
+
+
+when code in js file then js first make GEC and refred by "this"
+
+-> Javascript run file in two phase   
+
+-> Global Execution context
+-> Funtion Execution context
+-> Eval Execution context (in mangoose  or part of GEC )
+
+  ------
+
+  ------> Memory creation phase ( creation phase)
+  ------> Execution phase
+
+
+  Code example 
+
+
+        let val1 = 10 ;
+        let val2 = 5
+        function addNum(num1 , num2){
+            let total = num1 + num2
+            return total 
+        }
+        let result1 = addNum(val1 , val2);
+        let result2 = addNum(10 , 2)
+
+steps to execute 
+step1 : create Global execution or global env
+        this -> GCE 
+step2: Memory phase 
+    val1 -> undefined        
+    val2 -> undefined        
+    addnum -> undefined        
+    result1 -> undefined        
+    result2 -> undefined        
+
+ step3 :    executon phase
+        val1 -> 10 
+        val2 -> 5 
+        now it come to line 29 
+        result1 -> addNum -> again -------------------------------
+        resukt1 =  15              |    New variable              |
+        result2 =  same as res1    |          environment         |
+                                   |                +             |
+                                   |           Execution          |
+                                   |             thread           |
+                                   |                              |
+                                   |------------------------------| ---> delete after execution
+         |-------------------|-------
+         |-> Memory phase    |--> execution context
+         val1 -> undefined    --> num1 -> 10 
+         val2 -> undefined    --->  num2 -> 5 
+         total -> undefined   total -> 15 
+
+         and return store total in GEC (this)
+
+
+
+
+
+
+
+///+++++++++++++++SUMMERISE +++++++++++++++++++++//
+
+
+
+
+         // 🔵 JavaScript: How the JS Engine Executes Code
+
+// -----------------------------------------------------
+// 🔷 Step 1: Global Execution Context (GEC) is Created
+// -----------------------------------------------------
+
+// When a JS file runs, the JS engine creates one global execution context by default.
+// This context has two phases:
+//   1. Memory Creation Phase (also called Variable Environment)
+//   2. Execution Phase (also called Thread of Execution)
+
+// Global EC is always the bottom of the call stack
+// 'this' inside the GEC refers to the global object (e.g., 'window' in browser or 'global' in Node.js)
+
+let val1 = 10; // Global variable
+let val2 = 5;  // Global variable
+
+function addNum(num1, num2) {
+  // 🔶 Step 4: Function Execution Context (FEC) is created when this function is called
+  // It also has 2 phases:
+  //   - Memory Creation Phase:
+  //       num1 → undefined
+  //       num2 → undefined
+  //       total → undefined
+  //   - Execution Phase:
+  //       num1 = passed value
+  //       num2 = passed value
+  //       total = num1 + num2
+  //       return total
+
+  let total = num1 + num2;
+  return total;
+}
+
+// --------------------------------------------
+// 🔶 Step 2: Memory Creation Phase (GEC)
+// --------------------------------------------
+// All variables & functions are hoisted.
+// Functions are hoisted with full body.
+// Variables are initialized with 'undefined':
+//
+// val1     → undefined
+// val2     → undefined
+// addNum   → function definition
+// result1  → undefined
+// result2  → undefined
+
+// --------------------------------------------
+// 🔶 Step 3: Execution Phase (GEC)
+// --------------------------------------------
+// Code runs top to bottom, line by line
+
+// Now actual values are assigned:
+val1 = 10;
+val2 = 5;
+
+// When function is called, new Execution Context is created and pushed to call stack
+let result1 = addNum(val1, val2); 
+// result1 = 15
+// FEC is popped from the stack after return
+
+let result2 = addNum(10, 2); 
+// result2 = 12
+// Another FEC is created and destroyed
+
+// At this point, Global Memory looks like:
+// val1    → 10
+// val2    → 5
+// addNum  → function
+// result1 → 15
+// result2 → 12
+
+console.log("Result 1:", result1); // 15
+console.log("Result 2:", result2); // 12
+
+
+
+
+// call stack 
+   // 🔁 JavaScript Call Stack Example (Step-by-step tracking)
+
+// Example Code:
+let val1 = 10;
+let val2 = 5;
+
+function addNum(num1, num2) {
+  let total = num1 + num2;
+  return total;
+}
+
+let result1 = addNum(val1, val2);
+let result2 = addNum(10, 2);
+
+console.log(result1);
+console.log(result2);
+
+
+// 📞 Call Stack Flow:
+
+// Step 1: Global Execution Context (GEC) is created and pushed
+// Call Stack:
+[
+  "Global Execution Context"
+]
+
+// Step 2: JS runs line-by-line
+// val1 and val2 are assigned
+// No change in call stack
+
+// Step 3: Function call: addNum(val1, val2)
+// New Function Execution Context (FEC) is created
+// Call Stack:
+[
+  "Function Execution Context: addNum(val1, val2)",
+  "Global Execution Context"
+]
+// After return → FEC is popped
+// result1 = 15
+
+// Step 4: Function call: addNum(10, 2)
+// New Function Execution Context (FEC) is created
+// Call Stack:
+[
+  "Function Execution Context: addNum(10, 2)",
+  "Global Execution Context"
+]
+// After return → FEC is popped
+// result2 = 12
+
+// Step 5: console.log(result1)
+// Call Stack:
+[
+  "console.log",
+  "Global Execution Context"
+]
+// After log → popped
+
+// Step 6: console.log(result2)
+// Call Stack:
+[
+  "console.log",
+  "Global Execution Context"
+]
+// After log → popped
+
+// Step 7: End of script → Global Execution Context is popped
+// Final Call Stack: []
