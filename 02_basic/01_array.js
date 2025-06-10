@@ -67,6 +67,16 @@ const arr2 = [3 , 4, 5]
 
 // check and transform to array 
 
-console.log(Array.isArray("Satyam"))
-console.log(Array.from("Satyam"))
-console.log(Array.from({name: "satyam"}))
+// console.log(Array.isArray("Satyam"))  // false 
+// console.log(Array.from("Satyam"))  // array  of character 
+// console.log(Array.from({name: "satyam"})) // []
+
+// let score1 = 100
+// let score2 = 200
+// let score3 = 300
+
+// console.log(Array.of(score1 , score2 , score3))
+//  ArrayConstructor.of<any>(...items: any[]): any[]
+// Returns a new array from a set of elements.
+
+// @param items — A set of elements to include in the new array
