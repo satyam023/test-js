@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        .profile {
+            flex-direction: column;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2px;
+        }
+
+        p {
+            text-align: center;
+        }
+
+        #btn {
+            display: block;
+            align-self: center;
+            height: 30px;
+            width: 100px;
+            border: 2px solid rgb(239, 204, 204);
+            border-radius: 30px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body style="background-color: #212121; color: white;">
+    <!-- 0 UNSENT Client has been created. open() not called yet.
+    1 OPENED open() has been called.
+    2 HEADERS_RECEIVED send() has been called, and headers and status are available.
+    3 LOADING Downloading; responseText holds partial data.
+    4 DONE The operation is complete. -->
+
+    <div class="profile">
+        <div class="avtar"></div>
+        <div class="name"></div>
+        <div class="bio"></div>
+        <div class="follwers"></div>
+    </div>
+    <p> Click to get data </p>
+    <button id="btn">Get Data</button>
+   
+</body>
+<script>
+    // no one use recently or use less number of dev
+    // XMLHttpRequest (XHR) objects are used to interact with servers.
+    //  You can retrieve data from a URL without having to do a full page
+    // refresh. This enables a Web page to update just part of a page
+    // without disrupting what the user is doing.
+
+    //              🧠 Key Points -->
+    // - XML is **not** a programming language.
+    // - It is **both human-readable and machine-readable**.
+    // - It uses **custom tags** to define data.
+    // - It is **self-descriptive** (data + structure in one).
+
+    //     1. XML must have a **single root element**.
+    // 2. Tags must be **properly closed**.
+    // 3. Tags are **case-sensitive**.
+    // 4. Attribute values must be in **quotes**.
+    // 5. **No predefined tags** (you create your own).
+
+
+    // <!-- 🔄 XML vs HTML -->
+    // - XML is about **data**; HTML is about **display**.
+    // - XML has **no predefined tags**, HTML does.
+    // - Browsers don’t render XML like HTML.
+    // - XML can be used with **AJAX, APIs, and configs**.
+
+    // <!-- 🌐 Common Uses of XML -->
+    // - Web services (SOAP)
+    // - API response formats
+    // - Configuration files (e.g., `.pom.xml` in Maven)
+    // - Storing structured data (like a database)
+
+    // <!-- 💡 Fun Fact -->
+    // JSON has mostly replaced XML in modern APIs because it's lighter and easier to read in JavaScript, but XML is still used in many legacy systems.
+
+    /*
+            // 📌 1. What is XMLHttpRequest?
+
+        // ✅ XMLHttpRequest is a JavaScript API to make HTTP requests (GET, POST, etc.) in the browser.
+        // It’s used for AJAX calls to fetch/send data without reloading the page.
+
+        const xhr = new XMLHttpRequest(); // Step 1: Create object
+
+        xhr.open('GET', 'https://jsonplaceholder.typicode.com/posts/1'); // Step 2: Define method & URL
+        xhr.send(); // Step 3: Send request
+
+        xhr.onload = function () {
+        if (xhr.status === 200) {
+            console.log('Response:', xhr.responseText); // raw string
+        } else {
+            console.error('Error:', xhr.status);
+        }
+        };
+    */
+
+    /*
+    
+    | Feature              | `XMLHttpRequest` (XHR)                   | HTTP Request (HttpReq)                      |
+| -------------------- | ---------------------------------------- | ------------------------------------------- |
+| What it is           | JS API in browser to send HTTP requests  | Actual network message sent to a server     |
+| Level                | **Code-level** (JavaScript API)          | **Protocol-level** (network/internet layer) |
+| Runs in              | Browser (client-side JS)                 | All clients (browser, Postman, curl, etc.)  |
+| Use case             | AJAX calls, updating UI without reload   | Every web interaction (pages, APIs, etc.)   |
+| Example Tool         | `XMLHttpRequest`, `fetch()`              | `curl`, Postman, browser address bar        |
+| Can be customized by | JS code (`xhr.setRequestHeader()`, etc.) | Headers, cookies, body in raw request       |
+| Protocol used        | HTTP / HTTPS internally                  | HTTP / HTTPS directly                       |
+| Response format      | Text, JSON, XML                          | Text, HTML, JSON, XML                       |
+| Replacement          | Replaced by `fetch()` in modern JS       | Still the core protocol                     |
+    */
+
+    const requestURL = 'https://api.github.com/users/satyam023'
+    const xhr = new XMLHttpRequest();
+    const avtar = document.querySelector('.avtar')
+    const name = document.querySelector('.name')
+    const bio = document.querySelector('.bio')
+    const follwers = document.querySelector('.follwers')
+    xhr.open('GET', requestURL)
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            const data = JSON.parse(this.responseText)
+            console.log(data);
+            document.getElementById('btn').addEventListener('click' , ()=>{
+                avtar.innerHTML = ` <img src="${data.avatar_url}" alt="GitHub Avatar" width="100" />`;
+                name.innerHTML = `${data.name}`;
+                bio.innerHTML = `${data.bio}`;
+                follwers.innerHTML = `Followers: ${data.followers}`;
+            }); 
+        }
+    }
+    xhr.send();
+
+
+</script>
+
+</html>
