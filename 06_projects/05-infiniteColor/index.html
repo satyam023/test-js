@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 05</title>
+    <style>
+        body {
+            background-color: rgb(66, 66, 66);
+            align-items: center;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 50px 0;
+            color: white;
+        }
+
+        #start,
+        #stop {
+            height: 45px;
+            width: 100px;
+            border-radius: 30px;
+            cursor: pointer;
+            color: white;
+            background-color: black;
+            margin-left: 25px;
+        }
+
+        .button {
+            display: flex;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        #stop:hover {
+            background-color: #d9c9c9;
+            color: rgb(20, 20, 20);
+        }
+
+        #start:hover {
+            background-color: #cfcece;
+            color: rgb(12, 12, 12);
+        }
+
+        #start:disabled {
+            background-color: #cfcece;
+            color: rgb(12, 12, 12);
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="heading">Start to see color looping</h1>
+    <div class="button">
+        <button id="start">Start</button>
+        <button id="stop">Stop</button>
+    </div>
+</body>
+<script>
+
+    let intervalRef;
+    document.querySelector('#start')
+        .addEventListener('click', function () {
+            if (intervalRef) return;
+            this.disabled = true;
+            document.querySelector('#heading').style.visibility = 'hidden';
+            intervalRef = setInterval(function () {
+                const r = Math.floor(Math.random() * 256);
+                const g = Math.floor(Math.random() * 256);
+                const b = Math.floor(Math.random() * 256);
+                document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
+            }, 1000)
+        })
+
+    document.querySelector('#stop')
+        .addEventListener('click', function () {
+            clearInterval(intervalRef);
+            intervalRef = null;
+            document.querySelector('#start').disabled = false;
+        })
+</script>
+
+</html>

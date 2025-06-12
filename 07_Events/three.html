@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVENT</title>
+<style>
+  body{
+    background-color: rgb(202, 202, 142);
+  }
+    h1 {
+      text-align: center;
+      text-decoration: underline;
+      text-decoration-style: wavy;
+    }
+
+  .container {
+  display: flex;
+  flex-direction: column;  /* ✅ stack items vertically */
+  align-items: center;     /* ✅ center horizontally */
+  gap: 5px;
+  width: 100%;
+  height: auto;
+  border: 2px solid black;
+  padding: 5px;
+  margin-top: 5px;
+  text-align: center;
+  background-color: rgb(162, 252, 252);
+}
+
+    #start, #stop {
+      height: 45px;
+      width: 100px;
+      border-radius: 30px;
+      cursor: pointer;
+      color: white;
+      background-color: black;
+      margin-left: 25px;
+    }
+     #stop:hover{
+      background-color: #d9c9c9;
+      color: rgb(20, 20, 20);
+     }
+     #start:hover{
+      background-color: #cfcece;
+      color: rgb(12, 12, 12);
+     }
+
+     #start:disabled{
+      background-color: #cfcece;
+      color: rgb(12, 12, 12);
+      cursor: not-allowed;
+     }
+    p{
+      font-weight: 500;
+      font-size: 30px;
+    }
+    .button{
+      display: flex;
+      justify-content: center;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>DOM || EVENT || PROJECT</h1>
+
+  <div class="container">
+    <p class="setup">Start to get Joke</p>
+    <h2 class="punchLine"></h2>
+     </div>
+  <div class="button">
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+  </div>
+
+  <script>
+    // set interval 
+
+        // const sayDate = function(str){
+        //     console.log(str, Date.now())
+        // }
+        // str is third parameter of stInterval 
+        // const intervalRef = setInterval(sayDate , 1000 , "hii" )
+         //    const h1 =  document.querySelector('h1')
+
+ 
+    let intervalRef;
+
+    document.querySelector('#start').addEventListener('click', function () {
+      if (intervalRef) return; // Prevent multiple intervals
+        this.disabled = true;
+      intervalRef = setInterval(async () => {
+        try {
+          const res = await fetch('https://official-joke-api.appspot.com/random_joke');
+          const data = await res.json();
+
+          const p = document.querySelector('.setup');
+          const h = document.querySelector('.punchLine');
+
+          p.textContent = data.setup;
+          h.textContent = data.punchline;
+
+          console.log(data);
+        } catch (err) {
+          console.error("Failed to fetch joke:", err);
+        }
+      }, 10000);
+    });
+
+    // document.querySelector('start').addEventListener('click' , function(){
+    //   if(intervalRef){
+    //    this.disabled = true;
+    //   }
+    // })
+
+    document.querySelector('#stop').addEventListener('click', function () {
+      clearInterval(intervalRef);
+      intervalRef = null;
+       document.querySelector('#start').disabled = false;
+    });
+  </script>
+</html>
