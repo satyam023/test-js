@@ -29,11 +29,12 @@
 
     //  in eariler there is method called attachEvent()
     // in jQuery - on
-    // 3) optimised code 
-    document.getElementById("owl").addEventListener('click', function(e){
-        alert("Owl cliked again")
-        console.log(e);
-    }, false)
+    // 3) optimised code
+    // fro event propogation , use false or default false or nothing 
+    // document.getElementById("owl").addEventListener('click', function(e){
+    //     alert("Owl cliked again")
+    //     console.log(e);
+    // }, false)
     
 
     // type , timestamp , defaultPrevented
@@ -41,5 +42,279 @@
     // clientX , clientY , screenX , sxreenY 
     /// altKey . ctrlKey , shiftKey , keyCode
     
+
+    /// for event captring 
+    // document.getElementById("images").addEventListener('click', function(e){
+    //     // alert("Owl cliked again")
+    //     console.log("clicked inside the url");
+    // }, true)
+     
+    // document.getElementById("owl").addEventListener('click', function(e){
+    //     // alert("Owl cliked again")
+    //     console.log("Owl cliked");
+    //     e.stopPropagation() // to stop propogation 
+    // }, true)
+
+
+    // bubbling happen  , from inside to outer from lower to higher siede 
+    // owl cliked then clicked inside the url  called bubbling 
+    // to prevent this we can use third argument as true that flow 
+    // from upper to lower , or from hiher to lower side 
+
+    // or to stop propogation u can use e.stopPropogation()
+
+    /*
+    📝 JavaScript Event Propagation Notes
+
+🔁 Event Propagation Phases:
+        ----------------------------------------
+        1. Capture Phase (Trickling):
+        - Event moves from the window/root to the target element.
+        - Top → Down (outer → inner)
+        - To handle events in this phase: useCapture = true
+
+        2. Target Phase:
+        - Event reaches the actual target element.
+        - Both capturing and bubbling listeners can run here if attached directly.
+
+        3. Bubble Phase:
+        - Event moves from the target element back up to the root.
+        - Bottom → Up (inner → outer)
+        - Default behavior of event listeners.
+
+        ----------------------------------------
+
+        🧷 Syntax:
+        element.addEventListener('click', callback, useCapture);
+
+        - useCapture = true → Capturing Phase (upper se niche execute hota aayeaga  parent ten child)
+        - useCapture = false (default) → Bubbling Phase (niche se upper execute hota aaye a child then parent)
+
+        ----------------------------------------
+
+        🧪 Example:
+        document.getElementById("images").addEventListener('click', function(e){
+            console.log("clicked inside the url");
+        }, true); // capturing phase
+
+        document.getElementById("owl").addEventListener('click', function(e){
+            console.log("Owl clicked");
+            e.stopPropagation(); // stops further propagation
+        }, true); // capturing phase
+
+        ----------------------------------------
+
+        ✅ Execution Order:
+        If you click on the inner element (#owl) and both listeners are in capturing phase:
+
+        1. "clicked inside the url"  (images - outer)
+        2. "Owl clicked"              (owl - inner)
+        → Then stopPropagation() is called, so event doesn’t bubble.
+
+        If both were in bubbling phase (useCapture = false), execution would be:
+
+        1. "Owl clicked"              (owl - inner)
+        2. "clicked inside the url"  (images - outer)
+
+        ----------------------------------------
+
+        🔐 stopPropagation():
+        - Stops the event from continuing further in the propagation path.
+        - If called during capturing, it stops before going deeper.
+        - If called during bubbling, it stops bubbling further up.
+        - Syntax: e.stopPropagation();
+
+        ⚠️ Common Mistake: Typo like e.stopPropogation() ❌ (Correct: stopPropagation ✅)
+
+        ----------------------------------------
+
+        🧠 Use Cases:
+
+        📍 Use Capturing (true) when:
+        - You want to intercept events before they reach target.
+        - Useful for early validation, analytics, blocking events early.
+
+        📍 Use Bubbling (false, default) when:
+        - You want to handle event after it has happened.
+        - Useful in event delegation, form submission, etc.
+
+        ----------------------------------------
+
+        🆚 Capturing vs Bubbling:
+
+        | Feature           | Capturing Phase         | Bubbling Phase           |
+        |-------------------|--------------------------|---------------------------|
+        | Direction         | Top → Down (outer → inner) | Bottom → Up (inner → outer) |
+        | Default           | No                       | Yes                       |
+        | useCapture Value  | true                    | false (default)           |
+        | Common Use        | Rare                    | Very common               |
+        | Stops By          | e.stopPropagation()     | e.stopPropagation()       |
+
+----------------------------------------
+
+    ✅ Summary:
+    - Events flow: Capture → Target → Bubble.
+    - Capturing = top-down (set useCapture = true)
+    - Bubbling = bottom-up (default)
+    - stopPropagation() halts further flow.
+    - Use capturing for early interception.
+    - Use bubbling for regular UI handling.
+ */
+
+
+    // preventDefault 
+   
+    // document.getElementById('google').addEventListener(
+    //     'click', function(e){
+    //         e.preventDefault();
+    //         console.log("Google clicked");
+    //         e.stopPropagation()
+    //     }, false)
+
+
+    document.querySelector('#images').addEventListener
+    ('click' , function(e){
+        // console.log(e.target.parentNode);
+        // let removeIt = e.target.parentNode
+        console.log(e.target.tagName);
+        
+        if(e.target.tagName === 'IMG'){
+            console.log(e.target.id);
+            let removeIt = e.target.parentNode
+            removeIt.remove()
+        }
+
+        // method to remove
+        // removeIt.remove()  // problem is that wehn clik in li then remove all li so need check  
+        // removeIt.parentNode.removeChild(removeIt)
+    })
+  
+//  EVENT LOOP 
+    /*
+    🧠 JavaScript Event Loop — Complete Notes
+
+📌 What is the Event Loop?
+-----------------------------------------------------
+JavaScript is single-threaded. It handles asynchronous operations using:
+- Call Stack
+- Web APIs (like setTimeout)
+- Task Queues (Macro & Micro)
+- Event Loop
+
+The event loop coordinates when code runs — it decides *what to execute next*.
+
+-----------------------------------------------------
+🏗️ Components:
+
+1. 📚 Call Stack (LIFO)
+   - Executes functions one at a time.
+   - If the stack is not empty, nothing else runs.
+
+2. 🌐 Web APIs (from browser)
+   - Handles setTimeout, DOM events, fetch, etc.
+   - Once complete, sends callback to task queues.
+
+3. 📦 Task Queues
+   a) 🐇 Microtask Queue (higher priority)
+      - `Promise.then`, `queueMicrotask`, `MutationObserver`
+   b) 🐢 Macrotask Queue (a.k.a Callback Queue)
+      - `setTimeout`, `setInterval`, `setImmediate`, `UI events`
+
+4. 🔁 Event Loop
+   - Keeps checking:
+     1. Is Call Stack empty?
+     2. If yes → run ALL microtasks.
+     3. Then → take one task from macrotask queue.
+     4. Repeat...
+
+-----------------------------------------------------
+📊 Execution Order:
+
+1. Global synchronous code
+2. Microtasks (Promise callbacks)
+3. Macrotasks (setTimeout, UI events)
+
+-----------------------------------------------------
+📦 Code Example:
+
+console.log('Start');
+
+setTimeout(() => {
+  console.log('Timeout');
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log('Promise');
+});
+
+console.log('End');
+
+🔽 Output:
+Start
+End
+Promise
+Timeout
+
+✅ Why?
+- 'Start' & 'End' run first (synchronous).
+- Promise is a microtask → runs after sync.
+- Timeout is a macrotask → runs after microtasks.
+
+-----------------------------------------------------
+📌 Microtasks vs Macrotasks
+
+| Feature           | Microtask Queue         | Macrotask Queue          |
+|------------------|--------------------------|---------------------------|
+| Priority          | Higher                   | Lower                     |
+| Examples          | Promise.then, queueMicrotask | setTimeout, setInterval |
+| Executes After    | Current stack execution | Microtasks complete       |
+| Can Block UI?     | Yes, if misused          | Less likely               |
+
+-----------------------------------------------------
+📉 ASCII Event Loop Diagram
+
+        +---------------------+
+        |     Call Stack      |
+        +---------------------+
+                  ▲
+                  |
+      +-----------+-----------+
+      |                       |
++-----+-----+         +-------+--------+
+| Web APIs |         | Microtask Queue |
++----------+         +-----------------+
+   |                             ▲
+   ▼                             |
++--------------+       +----------------------+
+| Macrotask Q  |       | Event Loop           |
++--------------+       | 1. Is stack empty?   |
+                       | 2. Run all microtasks|
+                       | 3. Run 1 macrotask   |
+                       +----------------------+
+
+-----------------------------------------------------
+📝 Notes / Use Cases:
+
+- Async/await uses Promises (microtask).
+- Use microtasks for urgent callbacks.
+- Use macrotasks for delayed actions (timers).
+- Avoid infinite microtasks (can freeze browser).
+- setTimeout(fn, 0) doesn't run immediately (~4ms min delay in practice).
+
+-----------------------------------------------------
+✅ Summary:
+
+- JS is single-threaded, but async via Event Loop.
+- Microtasks always run before macrotasks.
+- Use `Promise.then` for high-priority callbacks.
+- Understand the phases to write predictable async code.
+
+
+
+
+    */
+
+
+
 </script>
 </html>
