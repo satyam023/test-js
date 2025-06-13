@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>React</title>
+</head>
+<body>
+
+  <button>Button Clicked</button>
+
+  <script>
+    class React {
+      constructor() {
+        this.library = "React";
+        this.server = "https://localhost:300";
+
+        // Attach event listener
+        document.querySelector('button')
+          .addEventListener('click', this.handleClick.bind(this));
+      }
+
+      handleClick() {
+        console.log("Button Clicked");
+        console.log(this.server);
+      }
+    }
+
+    // 🔥 Instantiate the class
+    new React();
+
+//     🧠 Why .bind(this) is needed here?
+// Without .bind(this), inside handleClick, 
+// this would be undefined (in strict mode) 
+// or refer to the button (in non-strict mode),
+//  not your class instance. So this.server would 
+// be undefined or throw an error.
+
+// | If you want to....                                                             | Use      |
+// | --------------------------------------------------------------------------- | -------- |
+// | Call a function immediately with a custom `this`                            | `call()` |
+// | Pass a function somewhere else (event, timer, etc.) and **preserve `this`** | `bind()` |
+
+  </script>
+</body>
+</html>

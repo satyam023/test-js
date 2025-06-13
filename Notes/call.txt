@@ -1,0 +1,173 @@
+/*******************************************************
+🔍 Complete JavaScript Notes: `this`, `new`, `.call()`, and 'use strict'
+*******************************************************/
+
+/*
+🧠 1. What is `this` in JavaScript?
+
+- `this` is a special keyword that refers to the object that is executing the current function.
+- Its value is determined at **runtime** based on **how** the function is called.
+*/
+
+// Example 1: Method call
+const obj = {
+  name: "Satyam",
+  greet() {
+    console.log(this.name); // this refers to `obj`
+  }
+};
+obj.greet(); // Output: "Satyam"
+
+// Example 2: Regular function call
+function show() {
+  console.log(this); // What is 'this' here depends on strict vs non-strict mode
+}
+show(); // In non-strict: window, In strict: undefined
+
+/*******************************************************
+🧠 2. What is `'use strict'` and Why Use It?
+*******************************************************/
+
+/*
+🔒 'use strict' is a directive introduced in ES5 to help write cleaner, more secure code.
+
+✅ Enables:
+  - Safer `this` handling (undefined instead of window)
+  - Prevents accidental global variable creation
+  - Throws errors for silent mistakes
+
+📍 Usage: place it at the top of your script or function
+*/
+
+'use strict'; // Enable strict mode for the whole file
+
+/*
+📌 Strict Mode vs Non-Strict Mode:
+
+| Behavior                             | Non-Strict ❌         | Strict ✅               |
+|-------------------------------------|------------------------|-------------------------|
+| `this` in regular function          | global object (window) | undefined               |
+| Assigning to undeclared variables   | creates global var     | throws ReferenceError   |
+| Assign to read-only/global props    | silently fails         | throws TypeError        |
+| Duplicate function arguments        | allowed                | syntax error            |
+| `delete` on variables/functions     | allowed                | throws error            |
+*/
+
+// ❌ Unsafe in non-strict mode
+function badFunc() {
+  oops = 123; // accidentally creates global variable
+}
+badFunc();
+console.log(window.oops); // 123 (bad practice)
+
+// ✅ Safe in strict mode
+function safeFunc() {
+  'use strict';
+  // oops = 123; // ReferenceError: oops is not defined
+}
+
+/*******************************************************
+🧠 3. Constructor Functions and the `new` Keyword
+*******************************************************/
+
+/*
+✔ A constructor function creates a new object when called with `new`.
+
+🔁 Internally:
+1. Creates a blank object: `const this = {}`
+2. Assigns `this` to the newly created object
+3. Executes the function body
+4. Returns `this`
+*/
+
+function Person(name) {
+  this.name = name;
+  this.sayHello = function () {
+    console.log("Hi, I'm " + this.name);
+  };
+}
+
+const p1 = new Person("Satyam");
+p1.sayHello(); // "Hi, I'm Satyam"
+
+/*******************************************************
+🧠 4. The `.call()` Method — Explicit Binding
+*******************************************************/
+
+/*
+⚙️ `call()` allows us to explicitly set the value of `this` when calling a function.
+
+Syntax:
+  functionName.call(thisArg, arg1, arg2, ...);
+
+Use Case:
+When we want to invoke a function with `this` pointing to a specific object.
+*/
+
+function greetCity(city) {
+  console.log(this.name + " from " + city);
+}
+const user = { name: "Satyam" };
+greetCity.call(user, "Bhopal"); // Output: Satyam from Bhopal
+
+/*******************************************************
+🧠 5. Real Example: Helper Function in Constructor
+*******************************************************/
+
+'use strict';
+
+function setUserName(username) {
+  this.username = username; // Needs correct 'this'
+}
+
+function createUser(username, email, password) {
+  this.email = email;
+  this.password = password;
+
+  /*
+  ❌ Wrong Way:
+  setUserName(username); 
+  Why? → `this` in setUserName will be undefined in strict mode, or global object in non-strict mode.
+
+  ✅ Correct Way:
+  setUserName.call(this, username);
+  Why? → `this` now refers to the object created by `new createUser(...)`
+  */
+  setUserName.call(this, username);
+}
+
+const userOne = new createUser("sam", "sam@fb.com", "123");
+console.log(userOne);
+
+/*
+Output:
+createUser {
+  email: 'sam@fb.com',
+  password: '123',
+  username: 'sam'
+}
+*/
+
+/*******************************************************
+🧠 6. Summary: When to Use What?
+*******************************************************/
+
+/*
+✅ Always use `'use strict'` to avoid hidden bugs
+✅ Use `new` with constructor functions to create objects
+✅ Use `.call()` to pass correct `this` when calling a helper function
+✅ Avoid direct function calls inside constructors unless you're sure about `this`
+
+🚫 Never rely on non-strict behavior — it’s error-prone and unpredictable
+*/
+
+/*******************************************************
+🔁 Final Code Flow Visualization
+
+new createUser(...) →
+→ creates empty object {}
+→ `this` refers to it
+→ `this.email = ...`
+→ `setUserName.call(this, username)` assigns username to the same object
+→ returns the object
+*******************************************************/
